@@ -1,0 +1,102 @@
+Users:
+user_ id
+User_name
+User_password
+User_email
+The Users table holds information about the user
+
+Recipes
+Recipe_id
+Recipe_name
+Recipe_content
+Recipe_img
+time_alotted
+Is_public
+Instruction_id
+Author_id
+Occasions_id
+The Recipes table holds information about a recipe
+
+Ingredients
+Ingrediant_id
+Ingrediant_name
+ingredian_img
+Ingredient_price
+Recipe_id
+The Ingredients table sets the model for an ingredient
+	
+Instructions
+Instructions_id
+Instructions_content
+recipe_id
+The instructions table refers to a recipe’s instructions
+
+Grocery_item
+Grocery_id
+Ingrediant_id
+User_id
+The groceries table is the item in a user’s grocery list
+
+Occasions
+Occasions_id
+Occasion_type
+The occasions table refers to the type of occasion a recipe can be used for
+
+
+One to one:
+	Recipe to instructions
+One to many:
+	Author to recipes
+User to grocery-items
+Many to many:
+	Recipes to ingredients
+	Ingredients to groceries
+	Recipes to occasions
+	
+
+
+
+CREATE TABLE user(
+  user_id SERIAL PRIMARY KEY,
+  user_name VARCHAR(50) NOT NULL,
+  user_email VARCHAR(100) NOT NULL,
+  user_password VARCHAR(500) NOT NULL
+);
+
+CREATE TABLE recipes(
+  recipe_id SERIAL PRIMARY KEY,
+  recipe_name VARCHAR(100) NOT NULL,
+  recipe_content VARCHAR(1000) NOT NULL,
+  recipe_image TEXT NOT NULL,
+  is_public BOOLEAN NOT NULL,
+  recipe_ingrediants TEXT NOT NULL,
+  recipe_author INTEGER NOT NULL REFERENCES user(user_id),
+  recipe_instructions INTEGER NOT NULL REFERENCES instructions(instructions_id),
+  recipe_occasion INTEGER NOT NULL REFERENCES occasion(occasion_id)
+);
+
+CREATE TABLE ingrediants(
+  ingrediant_id SERIAL PRIMARY KEY,
+  ingrediant_name VARCHAR(50) NOT NULL,
+  ingrediant_img TEXT NOT NULL,
+  ingrediant_price FLOAT NOT NULL,
+  recipe_id INTEGER NOT NULL REFERENCES recipes(recipe_id)
+);
+
+CREATE TABLE instructions(
+  instructions_id SERIAL PRIMARY KEY,
+  intructions_content TEXT NOT NULL,
+  recipe_id INTEGER NOT NULL REFERENCES recipes(recipe_id)
+);
+
+CREATE TABLE grocery_item(
+  grocery_id SERIAL PRIMARY KEY,
+  ingrediant_id INTEGER NOT NULL REFERENCES ingrediants(ingrediant_id),
+  user_id INTEGER NOT NULL REFERENCES user(user_id)
+);
+
+CREATE TABLE occasion(
+  occasion_id SERIAL PRIMARY KEY,
+  occasion_type VARCHAR(50) NOT NULL
+);
+
